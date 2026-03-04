@@ -1,0 +1,110 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{caption}
+
+\geometry{margin=2.5cm}
+
+\title{Group Project Proposal: \\[0.5em]
+\Large \textbf{Typhoon Chronicles: Hong Kong 1988–2023}}
+\author{Team 12 \\[0.5em]
+LEE, Ho Yin \quad Li, Haoyuan \\[1em]
+\small Course: COMP4462 \\ \small Date: \today}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Team Information}
+
+\textbf{Team Name:} D\&D
+
+\textbf{Members:}
+\begin{itemize}
+    \item LEE, Ho Yin
+    \item Li, Haoyuan
+\end{itemize}
+
+\section{Topic}
+
+Visualizing 35 Years of Typhoon Impact in Hong Kong: A Scrollytelling Journey from Meteorological Data to Human and Economic Consequences
+
+\section{Dataset}
+
+\subsection{Source}
+\textbf{Hong Kong Observatory (HKO) Tropical Cyclone Impact Dataset} \\
+Last Updated: 14 May 2025 \\
+Time Span: 1988 – 2023 (35 years) \\
+Official webpage: \url{https://www.hko.gov.hk/en/informtc/tc_impact.html} \\
+Dataset file: Provided in the assignment (\texttt{TC\_Impact\_Data\_HKO.xlsx})
+
+The dataset is compiled from HKO's Tropical Cyclone Annual Publications since 1988, including warning signals, meteorological data, casualties, and socio-economic impacts. Full metadata and format details are available in the online data dictionary.
+
+\subsection{Data Characteristics}
+The dataset contains \textbf{9 interconnected sheets} with approximately 250 tropical cyclone passages. Table~\ref{tab:dataset} summarises the key sheets.
+
+\begin{table}[h!]
+\centering
+\caption{Dataset overview}
+\label{tab:dataset}
+\begin{tabular}{@{} l l c @{}}
+\toprule
+\textbf{Sheet} & \textbf{Content} & \textbf{Key Attributes} \\
+\midrule
+Signal Data & TC basic info, warning signals, closest approach & 12 \\
+Wind & Max gust \& mean wind at 30+ stations & 60+ \\
+Rainfall & Total rainfall during TC passage & 50+ \\
+Other Met Data & Pressure, storm surge, tide levels & 9 \\
+Casualty \& Vessel & Deaths, injuries, vessels damaged & 11 \\
+Social Impact & Ferry/bus suspension, flight disruptions & 9 \\
+Physical Damage & Detailed damage to agriculture, public works & 80+ \\
+Monetary Damage & Economic losses by sector (HK\$ million) & 16 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Data types:} Numerical (wind, rain, casualties, losses), Categorical (signal level, bearing), Temporal (dates), Spatial (station locations), Text (damage descriptions).
+
+\section{Project Goals}
+
+\subsection{Problem}
+
+Hong Kong is struck by typhoons every once in awhile. While the Hong Kong Observatory publishes detailed reports, the information is scattered across static PDFs, tables, and news articles. There is no single, interactive narrative that allows a user to:
+\begin{itemize}
+    \item See the big picture of 35 years of typhoon activity at a glance
+    \item Then drill down into the different facets of impact.
+    \item Understand how these elements interrelate and how they have changed over time
+\end{itemize}
+
+\subsection{Purpose}
+
+Someone would use our visualization to:
+\begin{itemize}
+    \item \textbf{Explore} the complete 35-year history of typhoons in an engaging, story-driven format
+    \item \textbf{Compare} cyclones – e.g., how did Mangkhut (2018) differ from York (1999) or Hato (2017)?
+    \item \textbf{Identify patterns} – Are typhoons getting stronger? Is rainfall increasing?
+
+
+\end{itemize}
+
+\subsection{Target Audience}
+
+Our visualization serves multiple audiences:
+\begin{itemize}
+    \item \textbf{HK citizens} interested in understanding the history of storms affecting their neighbourhoods
+    \item \textbf{Educators and students} learning about data visualization, meteorology, and disaster preparedness
+    \item \textbf{Urban planners and government officials} identifying trends and vulnerabilities for future planning
+    \item \textbf{Climate researchers} studying changes in typhoon intensity and impacts over time
+\end{itemize}
+
+\subsection{How Our Visualization System Will Help Answer These Questions}
+
+We will build a \textbf{scrollytelling web-based visualization} that guides users through the data in a structured narrative. The journey begins with a timeline overview of all typhoons from 1988 to 2023, where each storm is represented by a glyph encoding wind speed, economic loss, and storm type. As users scroll, dedicated chapters explore different impact dimensions: wind distribution across Hong Kong districts, rainfall patterns, human casualties, economic losses by sector, social disruptions, and a comparative summary of the most impactful storms. Overall, we are trying to transform a complex dataset into an engaging narrative for diverse audiences.
+
+\end{document}
