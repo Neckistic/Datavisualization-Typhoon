@@ -116,6 +116,24 @@
         .timeline-box .row span { font-size:0.85rem; color:#1e3a5f; font-weight:600; }
         .year-display { color:#b02c2c !important; font-weight:700 !important; }
         #timeline-slider { margin:6px 0; }
+            .timeline-controls {
+                display:flex; align-items:center; justify-content:space-between;
+                gap:14px; flex-wrap:wrap; margin-top:12px;
+            }
+            .signal-filters {
+                display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+            }
+            .signal-filters .filter-label {
+                font-size:0.85rem; color:#1e3a5f; font-weight:600;
+            }
+            .signal-option {
+                display:inline-flex; align-items:center; gap:6px;
+                padding:6px 12px; border:1px solid #b0c7de; border-radius:999px;
+                background:white; color:#1e3a5f; font-size:0.8rem; font-weight:600;
+                cursor:pointer;
+            }
+            .signal-option input { margin:0; accent-color:#1e3a5f; }
+            .signal-option .legend-dot { margin-right:0; }
         .noUi-connect { background:#1e3a5f; }
         .noUi-handle { border-color:#1e3a5f; }
         .noUi-horizontal { height:10px; }
@@ -238,6 +256,17 @@
             <span class="year-display" id="yearDisplay">1988 &ndash; 2023</span>
         </div>
         <div id="timeline-slider"></div>
+        <div class="timeline-controls">
+            <div class="signal-filters" id="signalFilters">
+                <span class="filter-label"><i class="fas fa-filter"></i> Signal Filter</span>
+                <label class="signal-option"><input type="checkbox" class="signal-checkbox" value="1" checked><span class="legend-dot" style="background:#2ecc71"></span>Signal 1</label>
+                <label class="signal-option"><input type="checkbox" class="signal-checkbox" value="3" checked><span class="legend-dot" style="background:#16a085"></span>Signal 3</label>
+                <label class="signal-option"><input type="checkbox" class="signal-checkbox" value="8" checked><span class="legend-dot" style="background:#f39c12"></span>Signal 8</label>
+                <label class="signal-option"><input type="checkbox" class="signal-checkbox" value="9" checked><span class="legend-dot" style="background:#e67e22"></span>Signal 9</label>
+                <label class="signal-option"><input type="checkbox" class="signal-checkbox" value="10" checked><span class="legend-dot" style="background:#c0392b"></span>Signal 10</label>
+            </div>
+            <span style="margin-left:auto;font-size:0.78rem;color:#7f9ab5;" id="dataStatus"></span>
+        </div>
     </div>
 </div>
 
@@ -249,15 +278,6 @@
             <button class="btn-toggle active" data-view="cyclones">Cyclones</button>
             <button class="btn-toggle" data-view="wind">Avg Wind</button>
             <button class="btn-toggle" data-view="rain">Avg Rainfall</button>
-            <span style="width:1px;height:20px;background:#ddd;"></span>
-            <label><i class="fas fa-filter"></i> Signal:</label>
-            <select id="signalFilter">
-                <option value="all">All Signals</option>
-                <option value="1,3">Signal 1 / 3</option>
-                <option value="8">Signal 8</option>
-                <option value="9,10">Signal 9 / 10</option>
-            </select>
-            <span style="margin-left:auto;font-size:0.78rem;color:#7f9ab5;" id="dataStatus"></span>
         </div>
     </div>
 </section>
@@ -270,8 +290,8 @@
         <h2>Where Do the Storms Go?</h2>
         <p>
             Each circle on the map marks the closest point of approach of a tropical cyclone relative to the Hong Kong Observatory.
-            <b>Green dots</b> are lower-signal storms (1 or 3), <b>orange</b> marks Signal 8 (gale), and <b>red</b> marks the most
-            dangerous Signal 9 and 10 events. The size of each dot reflects economic loss.
+            Colours now map to individual warning levels, letting you compare Signal 1, 3, 8, 9, and 10 storms separately.
+            The size of each dot reflects economic loss.
         </p>
         <p style="margin-top:10px;">
             Switch to <b>Avg Wind</b> or <b>Avg Rainfall</b> view to see how weather stations across Hong Kong
@@ -289,9 +309,11 @@
             <div id="map"></div>
             <div class="map-legend" id="mapLegend">
                 <div style="font-weight:600;margin-bottom:4px;">Cyclone Signals</div>
-                <div><span class="legend-dot" style="background:#2ecc71"></span> Signal 1/3</div>
+                <div><span class="legend-dot" style="background:#2ecc71"></span> Signal 1</div>
+                <div><span class="legend-dot" style="background:#16a085"></span> Signal 3</div>
                 <div><span class="legend-dot" style="background:#f39c12"></span> Signal 8</div>
-                <div><span class="legend-dot" style="background:#e74c3c"></span> Signal 9/10</div>
+                <div><span class="legend-dot" style="background:#e67e22"></span> Signal 9</div>
+                <div><span class="legend-dot" style="background:#c0392b"></span> Signal 10</div>
             </div>
             <div id="mapMarkerCount"></div>
         </div>
@@ -334,18 +356,18 @@
         <p>
             Not all typhoons are created equal. The <b>radar chart</b> compares the average profile of storms
             at each signal level across five dimensions: wind gust, rainfall, storm surge, economic loss, and
-            people affected. Higher-signal storms clearly dominate across every axis &mdash; but loss and affected
-            counts spike <em>disproportionately</em> for Signal 9/10 events.
+            people affected. Higher-signal storms clearly dominate across every axis &mdash; and the jump from
+            Signal 8 to Signal 9 and 10 is especially visible in loss and affected counts.
         </p>
         <p style="margin-top:10px;">
-            The <b>box plot</b> shows how economic losses are distributed within each signal group.
+            The <b>box plot</b> shows how economic losses are distributed within each signal level.
             The wide range of outliers for Signal 8 reflects the fact that many factors beyond wind speed &mdash;
             rainfall, timing, storm surge, and track &mdash; determine the final damage.
         </p>
         <div class="insight">
             <i class="fas fa-lightbulb"></i>
-            <b>Key insight:</b> Signal 9/10 storms cause losses that are on average 10&times; higher than Signal 8 storms.
-            The jump from Signal 8 to 9 represents a threshold where damage becomes catastrophic.
+            <b>Key insight:</b> Signal 9 and Signal 10 storms sit in a very different loss range from Signal 8 storms.
+            The jump from Signal 8 upward marks the point where damage becomes far more likely to turn catastrophic.
         </div>
     </div>
 
@@ -532,7 +554,15 @@
     });
 
     // ===== STATE =====
-    var currentView='cyclones', yearRange=[1988,2023], signalFilter='all';
+    var SIGNAL_ORDER=[1,3,8,9,10];
+    var SIGNAL_META={
+        1:{label:'Signal 1',color:'#2ecc71'},
+        3:{label:'Signal 3',color:'#16a085'},
+        8:{label:'Signal 8',color:'#f39c12'},
+        9:{label:'Signal 9',color:'#e67e22'},
+        10:{label:'Signal 10',color:'#c0392b'}
+    };
+    var currentView='cyclones', yearRange=[1988,2023], selectedSignals=SIGNAL_ORDER.slice();
 
     // ===== MAP =====
     var map=L.map('map').setView([22.35,114.10],10);
@@ -544,12 +574,19 @@
     }).addTo(map).bindTooltip('HK Observatory',{permanent:false});
     var tcLayer=L.layerGroup().addTo(map);
 
+    function getSignalColor(signal){
+        return (SIGNAL_META[signal]||{}).color||'#1e3a5f';
+    }
+
+    function getActiveSignals(){
+        return selectedSignals.slice().sort(function(a,b){ return a-b; });
+    }
+
     function getFiltered(){
         return allCyclones.filter(function(c){
             if(c.year<yearRange[0]||c.year>yearRange[1]) return false;
-            if(signalFilter!=='all'){
-                var sigs=signalFilter.split(',').map(Number);
-                if(sigs.indexOf(c.signal)<0) return false;
+            if(selectedSignals.indexOf(c.signal)<0){
+                return false;
             }
             return true;
         });
@@ -560,7 +597,7 @@
         var filtered=getFiltered();
         filtered.forEach(function(c){
             if(!c.lat||!c.lng) return;
-            var color=c.signal>=9?'#e74c3c':(c.signal===8?'#f39c12':'#2ecc71');
+            var color=getSignalColor(c.signal);
             var r=Math.min(8,Math.max(4,Math.sqrt(c.loss||0)*0.12+4));
             L.circleMarker([c.lat,c.lng],{
                 radius:r,fillColor:color,color:'#fff',weight:1.5,fillOpacity:0.8
@@ -640,9 +677,9 @@
         var el=document.getElementById('mapLegend');
         if(type==='cyclones'){
             el.innerHTML='<div style="font-weight:600;margin-bottom:4px;">Cyclone Signals</div>'+
-                '<div><span class="legend-dot" style="background:#2ecc71"></span> Signal 1/3</div>'+
-                '<div><span class="legend-dot" style="background:#f39c12"></span> Signal 8</div>'+
-                '<div><span class="legend-dot" style="background:#e74c3c"></span> Signal 9/10</div>';
+                SIGNAL_ORDER.map(function(signal){
+                    return '<div><span class="legend-dot" style="background:'+getSignalColor(signal)+'"></span> '+SIGNAL_META[signal].label+'</div>';
+                }).join('');
         } else if(type==='wind'){
             el.innerHTML='<div style="font-weight:600;margin-bottom:4px;">Avg Max Gust (km/h)</div>'+
                 '<div style="background:linear-gradient(to right,rgb(0,255,50),rgb(255,200,50),rgb(255,0,50));height:12px;border-radius:4px;margin:4px 0;"></div>'+
@@ -695,45 +732,45 @@
     function updateFreqChart(filtered){
         var ys={};
         filtered.forEach(function(c){
-            if(!ys[c.year]) ys[c.year]={low:0,mid:0,high:0};
-            if(c.signal<=3) ys[c.year].low++;
-            else if(c.signal===8) ys[c.year].mid++;
-            else ys[c.year].high++;
+            if(!ys[c.year]) ys[c.year]={};
+            ys[c.year][c.signal]=(ys[c.year][c.signal]||0)+1;
         });
         var years=[];for(var y=yearRange[0];y<=yearRange[1];y++) years.push(y);
         freqChart.setOption({
             tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
-            legend:{data:['Signal 1/3','Signal 8','Signal 9/10'],bottom:0,textStyle:{fontSize:11}},
+            legend:{data:SIGNAL_ORDER.map(function(signal){ return SIGNAL_META[signal].label; }),bottom:0,textStyle:{fontSize:11}},
             grid:{left:40,right:15,top:10,bottom:40},
             xAxis:{type:'category',data:years,axisLabel:{fontSize:10,rotate:45}},
             yAxis:{type:'value',name:'Count',nameTextStyle:{fontSize:10},axisLabel:{fontSize:10},minInterval:1},
-            series:[
-                {name:'Signal 1/3',type:'bar',stack:'t',data:years.map(function(y){return(ys[y]||{}).low||0;}),itemStyle:{color:'#2ecc71'},barMaxWidth:22},
-                {name:'Signal 8',type:'bar',stack:'t',data:years.map(function(y){return(ys[y]||{}).mid||0;}),itemStyle:{color:'#f39c12'},barMaxWidth:22},
-                {name:'Signal 9/10',type:'bar',stack:'t',data:years.map(function(y){return(ys[y]||{}).high||0;}),itemStyle:{color:'#e74c3c'},barMaxWidth:22}
-            ]
+            series:SIGNAL_ORDER.map(function(signal){
+                return {
+                    name:SIGNAL_META[signal].label,
+                    type:'bar',
+                    stack:'t',
+                    data:years.map(function(y){return((ys[y]||{})[signal])||0;}),
+                    itemStyle:{color:getSignalColor(signal)},
+                    barMaxWidth:22
+                };
+            })
         },true);
     }
 
     function updateRadarChart(filtered){
-        var groups={'1,3':[],'8':[],'9,10':[]};
+        var groups={};
+        SIGNAL_ORDER.forEach(function(signal){ groups[signal]=[]; });
         filtered.forEach(function(c){
-            if(c.signal<=3) groups['1,3'].push(c);
-            else if(c.signal===8) groups['8'].push(c);
-            else groups['9,10'].push(c);
+            groups[c.signal].push(c);
         });
-        var colors={'1,3':'#2ecc71','8':'#f39c12','9,10':'#e74c3c'};
-        var names={'1,3':'Signal 1/3','8':'Signal 8','9,10':'Signal 9/10'};
         var sd=[],allA={gust:[],rain:[],surge:[],loss:[],aff:[]};
-        Object.keys(groups).forEach(function(key){
-            var a=groups[key]; if(!a.length) return;
+        SIGNAL_ORDER.forEach(function(signal){
+            var a=groups[signal]; if(!a.length) return;
             var ag=a.reduce(function(s,c){return s+(c.maxGust||0);},0)/a.length;
             var ar=a.reduce(function(s,c){return s+(c.maxRain||0);},0)/a.length;
             var as2=a.reduce(function(s,c){return s+(c.surge||0);},0)/a.length;
             var al=a.reduce(function(s,c){return s+(c.loss||0);},0)/a.length;
             var aa=a.reduce(function(s,c){return s+(c.affected||0);},0)/a.length;
             allA.gust.push(ag);allA.rain.push(ar);allA.surge.push(as2);allA.loss.push(al);allA.aff.push(aa);
-            sd.push({name:names[key],value:[ag,ar,as2,al,aa],areaStyle:{opacity:0.15},lineStyle:{width:2},itemStyle:{color:colors[key]}});
+            sd.push({name:SIGNAL_META[signal].label,value:[ag,ar,as2,al,aa],areaStyle:{opacity:0.15},lineStyle:{width:2},itemStyle:{color:getSignalColor(signal)}});
         });
         var mx=function(arr,min){return Math.max(min,Math.max.apply(null,arr.concat([0]))*1.3);};
         radarChart.setOption({
@@ -763,7 +800,7 @@
             data.push({
                 value:[c.year,Math.max(0.01,c.loss||0.01),c.affected||1,c.signal,c.maxGust||0],
                 tcName:c.name,tcYear:c.year,tcSignal:c.signal,
-                itemStyle:{color:c.signal>=9?'rgba(231,76,60,0.7)':(c.signal===8?'rgba(243,156,18,0.7)':'rgba(46,204,113,0.7)')}
+                itemStyle:{color:getSignalColor(c.signal)}
             });
         });
         bubbleChart.setOption({
@@ -786,22 +823,21 @@
     }
 
     function updateBoxplotChart(filtered){
-        var sg={'1/3':[],'8':[],'9/10':[]};
+        var sg={};
+        SIGNAL_ORDER.forEach(function(signal){ sg[signal]=[]; });
         filtered.forEach(function(c){
             var l=c.loss||0; if(l<=0) return;
-            if(c.signal<=3) sg['1/3'].push(l);
-            else if(c.signal===8) sg['8'].push(l);
-            else sg['9/10'].push(l);
+            sg[c.signal].push(l);
         });
         var cats=[],boxData=[],outliers=[];
-        ['1/3','8','9/10'].forEach(function(name){
-            var a=sg[name]; if(a.length<1) return;
+        SIGNAL_ORDER.forEach(function(signal){
+            var a=sg[signal]; if(a.length<1) return;
             a.sort(function(x,y){return x-y;});
             var n=a.length,q1=a[Math.floor(n*0.25)]||a[0],med=a[Math.floor(n*0.5)]||a[0],
                 q3=a[Math.floor(n*0.75)]||a[n-1],iqr=q3-q1,
                 lo=Math.max(a[0],q1-1.5*iqr),hi=Math.min(a[n-1],q3+1.5*iqr);
             var idx=cats.length;
-            cats.push('Signal '+name);
+            cats.push(SIGNAL_META[signal].label);
             boxData.push([lo,q1,med,q3,hi]);
             a.filter(function(v){return v<lo||v>hi;}).forEach(function(v){outliers.push([idx,v]);});
         });
@@ -865,9 +901,12 @@
                 renderMapView();
             });
         });
-        document.getElementById('signalFilter').addEventListener('change',function(){
-            signalFilter=this.value;
-            refreshAll();
+        document.querySelectorAll('.signal-checkbox').forEach(function(box){
+            box.addEventListener('change',function(){
+                selectedSignals=document.querySelectorAll('.signal-checkbox:checked');
+                selectedSignals=Array.prototype.map.call(selectedSignals,function(input){ return Number(input.value); });
+                refreshAll();
+            });
         });
         window.addEventListener('resize',function(){
             freqChart&&freqChart.resize();radarChart&&radarChart.resize();
